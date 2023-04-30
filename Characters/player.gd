@@ -1,38 +1,33 @@
 extends CharacterBody2D
 
-const JUMP_BTN = "jump"
-const LEFT_BTN = "left"
-const RIGHT_BTN = "right"
-
 @export var speed : float = 200.0
-@export var jump_velocity : float = -150.0
-@export var double_jump_velocity : float = -100
 
-# Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-var has_double_jumped : bool = false
+@onready var sprite: Sprite2D = $Sprite2D
+@onready var animation_tree: AnimationTree = $AnimationTree
+@onready var state_machine: CharacterStateMachine = $CharacterStateMachine
+
+func _ready():
+	animation_tree.active = true
 
 func _physics_process(delta):
-	# Add the gravity.
-	if not is_on_floor():
-		velocity.y += gravity * delta
-	else: 
-		has_double_jumped = false
-
-	# Handle Jump.
-	if Input.is_action_just_pressed(JUMP_BTN):
-		if is_on_floor():
-			velocity.y = jump_velocity
-		elif not has_double_jumped:
-			velocity.y = double_jump_velocity
-			has_double_jumped = true
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction = Input.get_axis(LEFT_BTN, RIGHT_BTN)
-	if direction:
-		velocity.x = direction * speed
+	
+	var direction = Input.get_vector(
+		Constants.LEFT_BTN, 
+		Constants.RIGHT_BTN, 
+		Constants.UP_BTN, 
+		Constants.DOWN_BTN
+	)
+	
+	if direction.x != 0 && state_machine.can_move():
+		velocity.x = direction.x * speed
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
+		
+	if direction.x > 0:
+		sprite.flip_h = false
+	elif direction.x < 0:
+		sprite.flip_h = true
+
+	animation_tree.set(Constants.BLEND_POSITION_PATH, direction.x)
 
 	move_and_slide()
