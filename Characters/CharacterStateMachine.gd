@@ -15,8 +15,11 @@ func _ready():
 	for child in get_children():
 		if (child is State):
 			states.append(child)
+			
 			child.character = character
 			child.playback = animation_tree[PLAYBACK]
+			
+			child.connect("interrupt_state", on_state_interrupt_state)
 		else:
 			push_warning("Child" + child.name + " in not a State")
 
@@ -38,3 +41,7 @@ func _input(event: InputEvent):
 
 func can_move():
 	return current_state.can_move
+
+
+func on_state_interrupt_state(new_state: State):
+	switch_state(new_state)
