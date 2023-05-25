@@ -1447,4 +1447,13 @@ drag_vertical_enabled = true
 
 [node name="Snail" parent="." instance=ExtResource("3_4jfer")]
 
+[node name="Snail2" parent="." instance=ExtResource("3_4jfer")]
+position = Vector2(196, 68)
+
+[node name="Snail3" parent="." instance=ExtResource("3_4jfer")]
+position = Vector2(243, 58)
+
+[node name="Snail4" parent="." instance=ExtResource("3_4jfer")]
+position = Vector2(156, 38)
+
 [node name="HealthChangedManager" parent="." instance=ExtResource("4_dquaj")]

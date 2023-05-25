@@ -20,6 +20,7 @@ func _physics_process(delta):
 		velocity.y += gravity * delta
 		
 	var direction: Vector2 = starting_move_direction
+	
 	if direction && state_machine.can_move():
 		velocity.x = direction.x * movement_speed
 	elif state_machine.current_state != hit_state:

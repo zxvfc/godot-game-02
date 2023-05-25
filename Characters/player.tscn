@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://7lsylwlmh3ro"]
+[gd_scene load_steps=46 format=3 uid="uid://7lsylwlmh3ro"]
 
 [ext_resource type="Texture2D" uid="uid://bimuifigkxk2r" path="res://Art/Legacy-Fantasy - High Forest 2.3/Character/Idle/Idle-Sheet.png" id="1_b6ryj"]
 [ext_resource type="Script" path="res://Characters/player.gd" id="1_m8ylb"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://Characters/AttackState.gd" id="10_7uv4t"]
 [ext_resource type="Script" path="res://Characters/StateLabel.gd" id="11_ag368"]
 [ext_resource type="Script" path="res://Characters/Sword.gd" id="12_70mnp"]
+[ext_resource type="Script" path="res://Characters/FacingCollisionShape.gd" id="13_wk50u"]
 
 [sub_resource type="Animation" id="Animation_7tvmy"]
 length = 0.001
@@ -458,6 +459,11 @@ air_state = NodePath("../Air")
 attack_state = NodePath("../Attack")
 attack_animation_node = "attack1"
 
+[node name="BufferTimer" type="Timer" parent="CharacterStateMachine/Ground"]
+wait_time = 0.05
+one_shot = true
+autostart = true
+
 [node name="Air" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("landing_state")]
 script = ExtResource("8_08uch")
 landing_state = NodePath("../Landing")
@@ -491,15 +497,20 @@ state_machine = NodePath("../CharacterStateMachine")
 position = Vector2(0, 2)
 shape = SubResource("CapsuleShape2D_xorqd")
 
-[node name="Sword" type="Area2D" parent="."]
+[node name="Sword" type="Area2D" parent="." node_paths=PackedStringArray("player", "facing_shape")]
 position = Vector2(1, 0)
 collision_layer = 0
 collision_mask = 4
 script = ExtResource("12_70mnp")
+player = NodePath("..")
+facing_shape = NodePath("CollisionShape2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sword"]
-position = Vector2(28, 0)
+position = Vector2(25, 0)
 shape = SubResource("RectangleShape2D_hxrin")
+script = ExtResource("13_wk50u")
+facing_left_position = Vector2(-25, 0)
+facing_right_position = Vector2(25, 0)
 
 [connection signal="animation_finished" from="AnimationTree" to="CharacterStateMachine/Landing" method="_on_animation_tree_animation_finished"]
 [connection signal="animation_finished" from="AnimationTree" to="CharacterStateMachine/Attack" method="_on_animation_tree_animation_finished"]

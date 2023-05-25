@@ -8,8 +8,10 @@ class_name GroundState
 @export var attack_state: State
 @export var attack_animation_node: String = "attack"
 
+@onready var buffer_timer: Timer = $BufferTimer
+
 func state_process(delta):
-	if !character.is_on_floor():
+	if !character.is_on_floor() && buffer_timer.is_stopped():
 		next_state = air_state
 
 func handle_input(event: InputEvent):
