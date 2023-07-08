@@ -467,6 +467,7 @@ autostart = true
 [node name="Air" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("landing_state")]
 script = ExtResource("8_08uch")
 landing_state = NodePath("../Landing")
+double_jump_velocity = -250.0
 landing_animation = "jump_end"
 
 [node name="Landing" type="Node" parent="CharacterStateMachine" node_paths=PackedStringArray("ground_state")]
